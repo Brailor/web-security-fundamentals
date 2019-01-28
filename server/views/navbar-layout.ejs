@@ -1,18 +1,10 @@
 <% layout('main-layout') -%>
-<header>
-  <% include partials/navbar %>
-</header>
+<header><% include partials/navbar %></header>
 <main>
   <div class="mui--appbar-height"></div>
   <% if (sessionFlash) { %>
-    <div class='mui-panel alert alert-<%= sessionFlash.type %>'>
-      <%- sessionFlash.message %>
-    </div>
+  <div class="mui-panel alert alert-<%= sessionFlash.type %>"><%= sessionFlash.message %></div>
   <% } %>
-  <div class="mui-container"> 
-    <%- body -%>
-  </div>
+  <div class="mui-container"><%- body -%></div>
 </main>
-<footer class='mui--bg-primary-light mui--text-dark'> 
-  <% include partials/footer %>
-</footer>
+<footer class="mui--bg-primary-light mui--text-dark"><% include partials/footer %></footer>

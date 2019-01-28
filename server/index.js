@@ -16,6 +16,7 @@ const user = require('./routes/user');
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
 const { flashMiddleware } = require('./flash');
+const csp = require('helmet-csp');
 
 const app = express();
 
@@ -33,6 +34,22 @@ app.use(cors());
 ///////////////////////////////////////////
 //// ↓ EXERCISE 2 SOLUTION GOES HERE ↓ ////
 ///////////////////////////////////////////
+app.use(
+  csp({
+    // Specify directives as normal.
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'sha256-C+swWi17gQj2ljfhGZakLanoHJs2tBuW+18/IGbi0Y8='"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      fontSrc: ['data:'],
+      objectSrc: ["'none'"]
+    },
+    // Set to true if you only want browsers to report errors, not block them.
+    // You may also set this to a function(req, res) in order to decide dynamically
+    // whether to use reportOnly mode, e.g., to allow for a dynamic kill switch.
+    reportOnly: false
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('secret'));
