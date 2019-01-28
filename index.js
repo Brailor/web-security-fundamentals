@@ -6,7 +6,9 @@
 
 var app = require('./server/index.js');
 var debug = require('debug')('strawbank:server');
-var http = require('http');
+var https = require('https');
+var fs = require('fs');
+var path = require('path');
 
 /**
  * Get port from environment and store in Express.
@@ -27,7 +29,17 @@ app.set('port', port);
 ////    key: fs.readFileSync('filename'),
 ////    passphrase: 'key-passphrase'
 ////  }, app);
-var server = http.createServer(app);
+
+var options = {
+  key: fs.readFileSync('./keys/my-private.key'),
+  // key: path.join(__dirname, 'keys/my-private.key'),
+  // cert: path.join(__dirname, 'keys/my-certificate.crt'),
+  cert: fs.readFileSync('./keys/my-certificate.crt'),
+  passphrase: 'abcd1234' //process.env.PASSPHRASE
+};
+console.log(options.cert);
+
+var server = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -66,9 +78,7 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -91,8 +101,6 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
