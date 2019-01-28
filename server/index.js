@@ -6,6 +6,8 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const https = require('https');
+const fs = require('fs');
 
 const index = require('./routes/index');
 const accounts = require('./routes/accounts');
@@ -53,22 +55,29 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('secret'));
-app.use(session({
-  name: 'strawbank',
-  cookie: { maxAge: 60000 },
-  store: new SQLiteStore({
-    dir: path.join(__dirname, '..', 'db'),
-    db: 'development.sqlite',
-    table: 'sessions'
-  }),
-  saveUninitialized: true,
-  resave: 'true',
-  secret: 'secret'
-}));
+app.use(
+  session({
+    name: 'strawbank',
+    cookie: { maxAge: 60000 },
+    store: new SQLiteStore({
+      dir: path.join(__dirname, '..', 'db'),
+      db: 'development.sqlite',
+      table: 'sessions'
+    }),
+    saveUninitialized: true,
+    resave: 'true',
+    secret: 'secret'
+  })
+);
 
 ///////////////////////////////////////////
 //// ↓ EXERCISE 7 SOLUTION GOES HERE ↓ ////
 ///////////////////////////////////////////
+
+app.use(function(req, res, next) {
+  res.setHeader('X-Frame-Options', 'DENY');
+  next();
+});
 
 app.use(flashMiddleware);
 
@@ -78,13 +87,13 @@ app.use(flashMiddleware);
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
   res.locals.sessionFlash = req.session.sessionFlash;
   delete req.session.sessionFlash;
   next();
 });
 
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
   res.locals.currentUser = req.session.currentUser || null;
   next();
 });
@@ -95,8 +104,6 @@ app.use('/transfers', transfers);
 app.use('/auth', auth);
 app.use('/register', register);
 app.use('/user', user);
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -52,6 +52,7 @@
         <input name='amount' type="text" required placeholder="Amount ($)" value=<%= amount || 0 %>>
         <label for="amount">Amount</label>
       </div>
+      <input type="hidden" name="_csrf" value="<%- csrfToken %>">
       <button type="submit" class="mui-btn mui-btn--primary">
         💸 Transfer Funds
       </button>
