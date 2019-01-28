@@ -35,7 +35,7 @@ var options = {
   // key: path.join(__dirname, 'keys/my-private.key'),
   // cert: path.join(__dirname, 'keys/my-certificate.crt'),
   cert: fs.readFileSync('./keys/my-certificate.crt'),
-  passphrase: 'abcd1234' //process.env.PASSPHRASE
+  passphrase: process.env.PASSPHRASE //process.env.PASSPHRASE
 };
 console.log(options.cert);
 
