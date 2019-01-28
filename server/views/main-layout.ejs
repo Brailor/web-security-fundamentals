@@ -3,19 +3,41 @@
   <head>
     <title><%= title %></title>
     <!-- EXERCISE 8 requires modifying of the tag below ↓ -->
-    <link rel='stylesheet' href='/stylesheets/mui.css' />
+    <link
+      integrity="sha256=sU/MtbpbQ14BwcGPPPI/Ce2rUa00FOAcoGxfVFNlaow="
+      crossorigin="anonymous"
+      rel="stylesheet"
+      href="/stylesheets/mui.css"
+    />
     <!-- EXERCISE 8 requires modifying of the tag below ↓ -->
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link
+      integrity="sha256-1SAAENrcpsx6CcqyPU4Qdry9X6n34aUufTrhEX1vjkE="
+      crossorigin="anonymous"
+      rel="stylesheet"
+      href="/stylesheets/style.css"
+    />
     <!-- EXERCISE 8 requires modifying of the tag below ↓ -->
-    <script type='text/javascript' src='/javascripts/mui.js' ></script>
-    <!-- ↓ EXERCISE 7 SOLUTION GOES HERE ↓
-      <style></style>
-    -->
+    <script
+      integrity="sha256-IdGEORzIJf2vqMi++XalpG4iT6I1kb5s6JmsF4bViy4="
+      crossorigin="anonymous"
+      type="text/javascript"
+      src="/javascripts/mui.js"
+    ></script>
+    <style id="clickjack">
+      body {
+        display: none !important;
+      }
+    </style>
   </head>
   <body>
     <%- body -%>
-    <!-- ↓ EXERCISE 7 SOLUTION GOES HERE ↓
-      <script></script>
-    -->
+    <script>
+      if (self === top) {
+        const cj = document.getElementById('clickjack');
+        cj.parentNode.removeChild(cj);
+      } else {
+        top.location = self.location;
+      }
+    </script>
   </body>
 </html>
